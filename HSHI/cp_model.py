@@ -3,6 +3,7 @@ from ortools.sat.python import cp_model
 from data_preprocessing import *
 from plot_gantt import *
 from print_result import *
+from plot_load_profile import *
 from save_to_xlsx import *
 from save_to_csv import *
 
@@ -97,10 +98,16 @@ def main_workload(filepath) :
     max_loads, cumulative_workload  = workload_objective(model, activity_dict, activity_var_dict)
     
     solver = cp_model.CpSolver()
+    solver.parameters.log_search_progress = True
+    solver.parameters.max_time_in_seconds = 10.0
+    
     result_dict, status = solve_model(model, solver, activity_var_dict, max_loads)
     
-    if status == cp_model.OPTIMAL :
-        plot_schedule(result_dict)
+    if status in (cp_model.OPTIMAL, cp_model.FEASIBLE):        
+        # plot_schedule(result_dict)
+        plot_load_profile(result_dict, activity_dict)
+        plot_initial_load_profile(activity_dict)
+        plot_load_comparison(result_dict, activity_dict)
         print_workload_result(result_dict, cumulative_workload)
         save_to_xlsx(result_dict, activity_dict, base_date)
     else :

@@ -47,7 +47,7 @@ def data_preprocessing(filepath):
     df['raw_lst'] = (df['due_date'] - df['duration'])
     
     # 기준일자로부터의 상대 일수(int) 계산
-    base_date = df[['raw_est', 'raw_lst']].min().min()
+    base_date = min(df['raw_est'].min(), df['raw_lst'].min())    
     df['indexed_est'] = (df['raw_est'] - base_date)
     df['indexed_lst'] = (df['raw_lst'] - base_date)
 

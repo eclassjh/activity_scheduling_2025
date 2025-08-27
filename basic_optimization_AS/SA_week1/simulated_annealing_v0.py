@@ -1,4 +1,3 @@
-from ortools.sat.python import cp_model
 import matplotlib.pyplot as plt
 import random
 import numpy as np
